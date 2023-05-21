@@ -1,0 +1,328 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model BloodType {
+  id   Int    @id @default(autoincrement()) @map("ID_RH")
+  name String @unique @map("NOMBRE_RH")
+
+  people Person[]
+
+  @@map("RH")
+}
+
+model DocumentType {
+  id   Int    @id @default(autoincrement()) @map("ID_DOCUMENTO")
+  name String @unique @map("TIPO_DOC")
+
+  people Person[]
+
+  @@map("DOCUMENTO")
+}
+
+model Person {
+  id             Int      @id @default(autoincrement()) @map("ID_PERSONA")
+  documentNumber Int      @unique @map("NUMERO_DOC_PER")
+  firstName      String   @map("NOMBRE_UNO_PER")
+  middleName     String?  @map("NOMBRE_DOS_PER")
+  surname        String   @map("APELLIDO_UNO_PER")
+  secondSurname  String?  @map("APELLIDO_DOS_PER")
+  gender         Gender   @map("SEXO_PER")
+  phone          Int?     @map("NUMERO_CONTACTO_PER")
+  birthDate      DateTime @map("FECHA_NAC_PER")
+
+  documentType   DocumentType @relation(fields: [documentTypeId], references: [id])
+  documentTypeId Int          @map("ID_DOCUMENTO")
+
+  bloodType   BloodType @relation(fields: [bloodTypeId], references: [id])
+  bloodTypeId Int       @map("ID_RH")
+
+  user    User?
+  student Student?
+  teacher Teacher?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("PERSONA")
+}
+
+model User {
+  user      String    @id @map("USUARIO_USU")
+  password  String    @map("CONTRASENIA_USU")
+  startDate DateTime  @default(now()) @map("FECHA_ING_USU")
+  endDate   DateTime? @map("FECHA_EGR_USU")
+  role      Role      @default(Student) @map("ROLL_USU")
+
+  person   Person @relation(fields: [personId], references: [id])
+  personId Int    @unique @map("ID_PERSONA")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("USUARIO")
+}
+
+model Teacher {
+  email      String @map("CORREO_DOC")
+  profession String @map("PROFESION_DOC")
+
+  person Person @relation(fields: [id], references: [id])
+  id     Int    @id @map("ID_PERSONA")
+
+  students Student[]
+
+  @@map("DOCENTE")
+}
+
+model Student {
+  photo String @map("FOTO_EST")
+
+  person    Person  @relation(fields: [id], references: [id])
+  id        Int     @id @map("ID_PERSONA")
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  teacherId Int     @map("ID_DOCENTE")
+
+  attendances  StudentsOnAttendances[]
+  groups       StudentsOnGroups[]
+  observations Observation[]
+  guardians    GuardiansOnStudents[]
+  notes        Note[]
+
+  @@map("ESTUDIANTE")
+}
+
+model Degree {
+  id   Int    @id @default(autoincrement()) @map("CODIGO_GRA")
+  name String @map("NOMBRE_GRA")
+
+  subjects SubjectsOnDegrees[]
+  groups   Group[]
+
+  @@map("GRADO")
+}
+
+model Subject {
+  id   Int    @id @default(autoincrement()) @map("CODIGO_ASIG")
+  name String @map("NOMBRE_ASIG")
+
+  degrees   SubjectsOnDegrees[]
+  notes     Note[]
+  schedules Schedule[]
+
+  @@map("ASIGNATURA")
+}
+
+model SubjectsOnDegrees {
+  description String @map("DESCRIPCION")
+
+  degree   Degree @relation(fields: [degreeId], references: [id])
+  degreeId Int    @map("CODIGO_ASIG")
+
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId Int     @map("CODIGO_GRA")
+
+  @@id([degreeId, subjectId])
+  @@map("GRADO_ASIGNATURA")
+}
+
+model Attendance {
+  id   Int      @id @default(autoincrement()) @map("ID_ASISTENCIA")
+  date DateTime @map("FECHA_ASIS")
+
+  students StudentsOnAttendances[]
+
+  @@map("ASISTENCIA")
+}
+
+model StudentsOnAttendances {
+  status AttendanceStatus @map("ESTADO")
+
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int     @map("ID_ESTUDIANTE")
+
+  attendance   Attendance @relation(fields: [attendanceId], references: [id])
+  attendanceId Int        @map("ID_ASISTENCIA")
+
+  @@id([studentId, attendanceId])
+  @@map("ASISTENCIA_ESTUDIANTE")
+}
+
+model Group {
+  id     Int         @id @default(autoincrement()) @map("CODIGO_GRU")
+  status GroupStatus @map("ESTADO_GRU")
+  year   Int         @map("ANIO_GRU")
+  name   String      @map("NOMBRE_GRU")
+
+  degree   Degree @relation(fields: [degreeId], references: [id])
+  degreeId Int    @map("CODIGO_GRA")
+
+  students StudentsOnGroups[]
+
+  @@map("GRUPO")
+}
+
+model StudentsOnGroups {
+  status StudentsOnGroupsStatus @map("ESTADO")
+
+  student   Student @relation(fields: [studnetId], references: [id])
+  studnetId Int     @map("ID_ESTUDIANTE")
+
+  group   Group @relation(fields: [groupId], references: [id])
+  groupId Int   @map("CODIGO_GRU")
+
+  @@id([studnetId, groupId])
+  @@map("ESTUDIANTE_GRUPO")
+}
+
+model Observation {
+  id          Int      @id @default(autoincrement()) @map("ID_OBSERVACION")
+  date        DateTime @map("FECHA_OBS")
+  description String   @map("DESCRIPCION_OBS")
+
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int     @map("ID_ESTUDIANTE")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("OBSERVACION")
+}
+
+model Guardian {
+  id            Int     @id @default(autoincrement()) @map("ID_ACUDIENTE")
+  firstName     String  @map("NOMBRE_UNO_ACU")
+  middleName    String? @map("NOMBRE_DOS_ACU")
+  surname       String  @map("APELLIDO_UNO_ACU")
+  secondSurname String? @map("APELLIDO_DOS_ACU")
+  phone         Int     @map("NUMERO_CONTACTO_ACU")
+
+  students GuardiansOnStudents[]
+
+  @@map("ACUDIENTE")
+}
+
+model GuardiansOnStudents {
+  status GuardiansOnStudentsStatus @map("ESTADO")
+
+  guardian   Guardian @relation(fields: [guardianId], references: [id])
+  guardianId Int      @map("ID_ACUDIENTE")
+
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int     @map("ID_ESTUDIANTE")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([guardianId, studentId])
+  @@map("ESTUDIANTE_ACUDIENTE")
+}
+
+model Period {
+  id        Int       @id @default(autoincrement()) @map("ID_PERIODO")
+  name      String    @map("NOMBRE_PER")
+  number    Int       @map("NUMERO_PER")
+  startDate DateTime  @map("FECHA_INICIO_PER")
+  endDate   DateTime? @map("FECHA_FIN_PER")
+
+  notes Note[]
+
+  @@map("PERIODO")
+}
+
+model Note {
+  id          Int    @id @default(autoincrement()) @map("ID_NOTA")
+  score       Float  @map("VALOR_NOTA")
+  description String @map("DESCRIPCION_NOTA")
+  percenScore Float  @map("PORCENTAJE_NOTA")
+
+  period   Period @relation(fields: [periodId], references: [id])
+  periodId Int    @map("ID_PERIODO")
+
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId Int     @map("CODIGO_ASIG")
+
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int     @map("ID_ESTUDIANTE")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("NOTA")
+}
+
+model DayWeek {
+  id   Int    @id @default(autoincrement()) @map("ID_DIA_SEMANA")
+  name String @unique @map("DIA_SEMANA_HOR")
+
+  schedules Schedule[]
+
+  @@map("DIA_SEMANA")
+}
+
+model TimeBlock {
+  id        Int    @id @default(autoincrement()) @map("ID_BLOQUE_HORA")
+  startTime String @map("INICIO_HORA_BLO")
+  endTime   String @map("FIN_HORA_BLO")
+
+  schedules Schedule[]
+
+  @@unique([startTime, endTime])
+  @@map("BLOQUE_HORA")
+}
+
+model Schedule {
+  id   Int    @id @default(autoincrement()) @map("ID_HORARIO")
+  year Int    @map("ANIO")
+  time String @map("CANTIDAD_HORA_HOR")
+
+  dayWeek   DayWeek @relation(fields: [dayWeekId], references: [id])
+  dayWeekId Int     @map("ID_DIA_SEMANA")
+
+  timeBlock   TimeBlock @relation(fields: [timeBlockId], references: [id])
+  timeBlockId Int       @map("ID_BLOQUE_HORA")
+
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId Int     @map("CODIGO_ASIG")
+
+  @@map("HORARIO")
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum Role {
+  Teacher
+  Student
+}
+
+enum AttendanceStatus {
+  Attended
+  Absent
+  Excused
+}
+
+enum GroupStatus {
+  Active
+  Inactive
+}
+
+enum StudentsOnGroupsStatus {
+  Active
+  Inactive
+}
+
+enum GuardiansOnStudentsStatus {
+  Active
+  Inactive
+}
