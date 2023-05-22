@@ -1,28 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
 
 enum Role {
   Teacher = 'Teacher',
   Student = 'Student',
 }
 
-enum Status {
-  Active = 'Active',
-  Inactive = 'Inactive',
-}
-
 export class CreateUserDto {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
   @ApiProperty({ type: String })
   user: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
   @ApiProperty({ type: String })
   password: string;
 
-  @ApiProperty({ type: Date, required: false })
-  startDate: Date;
-
-  @ApiProperty({ type: Date, required: false })
-  endDate: Date | null;
-
+  @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     required: false,
     default: Role.Student,
@@ -30,13 +28,8 @@ export class CreateUserDto {
   })
   role?: Role = Role.Student;
 
-  @ApiProperty({
-    required: false,
-    default: Status.Active,
-    examples: [Status.Active, Status.Inactive],
-  })
-  status: Status = Status.Active;
-
+  @IsNumber()
+  @IsNotEmpty()
   @ApiProperty({ type: Number })
   personId: number;
 }

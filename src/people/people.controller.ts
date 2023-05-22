@@ -10,7 +10,8 @@ import {
 import { PeopleService } from './people.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { PersonEntity } from './entities/person.entity';
 
 @Controller('people')
 @ApiTags('people')
@@ -18,16 +19,20 @@ export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
   @Post()
-  create(@Body() createPersonDto: CreatePersonDto) {
-    return this.peopleService.create(createPersonDto);
+  @ApiCreatedResponse({ type: PersonEntity })
+  async create(@Body() createPersonDto: CreatePersonDto) {
+    return new PersonEntity(await this.peopleService.create(createPersonDto));
   }
 
   @Get()
-  findAll() {
-    return this.peopleService.findAll();
+  @ApiOkResponse({ type: PersonEntity, isArray: true })
+  async findAll() {
+    const people = await this.peopleService.findAll();
+    return people.map((person) => new PersonEntity(person));
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: PersonEntity })
   findOne(@Param('id') id: string) {
     return this.peopleService.findOne(+id);
   }
