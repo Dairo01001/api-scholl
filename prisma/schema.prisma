@@ -56,11 +56,12 @@ model Person {
 }
 
 model User {
-  user      String    @id @map("USUARIO_USU")
-  password  String    @map("CONTRASENIA_USU")
-  startDate DateTime  @default(now()) @map("FECHA_ING_USU")
-  endDate   DateTime? @map("FECHA_EGR_USU")
-  role      Role      @default(Student) @map("ROLL_USU")
+  user      String     @id @map("USUARIO_USU")
+  password  String     @map("CONTRASENIA_USU")
+  startDate DateTime   @default(now()) @map("FECHA_ING_USU")
+  endDate   DateTime?  @map("FECHA_EGR_USU")
+  role      Role       @default(Student) @map("ROLL_USU")
+  status    UserStatus @default(Active)
 
   person   Person @relation(fields: [personId], references: [id])
   personId Int    @unique @map("ID_PERSONA")
@@ -304,6 +305,11 @@ enum Gender {
 enum Role {
   Teacher
   Student
+}
+
+enum UserStatus {
+  Active
+  Inactive
 }
 
 enum AttendanceStatus {
