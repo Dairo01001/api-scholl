@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsEmail,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -13,7 +14,7 @@ enum Gender {
   Female = 'Female',
 }
 
-export class CreatePersonDto {
+export class CreateTeacherDto {
   @IsNumberString()
   @IsNotEmpty()
   @MinLength(8)
@@ -63,4 +64,22 @@ export class CreatePersonDto {
   @IsNotEmpty()
   @ApiProperty({ type: Date })
   birthDate: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  @ApiProperty({ type: String })
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty({ type: String, required: true })
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  @ApiProperty({ type: String, required: true })
+  profession: string;
 }
