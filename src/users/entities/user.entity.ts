@@ -28,9 +28,9 @@ export class UserEntity implements User {
   @ApiProperty()
   personId: number;
 
-  @ApiProperty()
+  @Exclude()
   createdAt: Date;
 
-  @ApiProperty()
+  @Exclude()
   updatedAt: Date;
 }

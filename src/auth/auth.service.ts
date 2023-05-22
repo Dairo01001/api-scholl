@@ -10,7 +10,10 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async login(user: string, password: string): Promise<AuthEntity> {
     const person = await this.prisma.user.findUnique({ where: { user } });

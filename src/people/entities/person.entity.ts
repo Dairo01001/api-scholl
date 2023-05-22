@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Gender, Person } from '@prisma/client';
+import { Exclude } from 'class-transformer';
 import { UserEntity } from 'src/users/entities/user.entity';
 
 export class PersonEntity implements Person {
@@ -15,7 +16,7 @@ export class PersonEntity implements Person {
   id: number;
 
   @ApiProperty()
-  documentNumber: bigint;
+  documentNumber: string;
 
   @ApiProperty()
   firstName: string;
@@ -33,7 +34,7 @@ export class PersonEntity implements Person {
   gender: Gender;
 
   @ApiProperty({ required: false, nullable: true })
-  phone: bigint | null;
+  phone: string | null;
 
   @ApiProperty()
   birthDate: Date;
@@ -44,10 +45,10 @@ export class PersonEntity implements Person {
   @ApiProperty()
   bloodTypeId: number;
 
-  @ApiProperty()
+  @Exclude()
   createdAt: Date;
 
-  @ApiProperty()
+  @Exclude()
   updatedAt: Date;
 
   @ApiProperty({ required: false, type: UserEntity })

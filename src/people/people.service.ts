@@ -2,13 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UsersService } from 'src/users/users.service';
+import { Role } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class PeopleService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly usersService: UsersService,
+  ) {}
 
-  create(createPersonDto: CreatePersonDto) {
-    return this.prisma.person.create({ data: createPersonDto });
+  async create(createPersonDto: CreatePersonDto) {
+    const person = await this.prisma.person.create({ data: createPersonDto });
+
+    await this.usersService.create({
+      user: person.documentNumber.toString(),
+      password: person.documentNumber.toString(),
+      personId: person.id,
+      role: Role.Teacher,
+    });
+
+    return person;
   }
 
   findAll() {

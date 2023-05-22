@@ -25,10 +25,10 @@ async function main() {
   });
 
   await prisma.person.upsert({
-    where: { documentNumber: 1117531976 },
+    where: { documentNumber: '1117531976' },
     update: {},
     create: {
-      documentNumber: 1117531976,
+      documentNumber: '1117531976',
       firstName: 'Dairo',
       surname: 'Garcia',
       secondSurname: 'Naranjo',
@@ -36,7 +36,7 @@ async function main() {
       documentTypeId: documentTypeCed.id,
       birthDate: '1994-04-25T05:24:30.259Z',
       gender: 'Male',
-      phone: 3027485520,
+      phone: '3027485520',
       user: {
         create: {
           user: 'admin',
