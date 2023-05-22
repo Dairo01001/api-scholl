@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('Scholl Api')
     .setDescription('Api para el manejo de estudiantes.')
     .setVersion('0.1')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -6,8 +6,8 @@ enum Gender {
 }
 
 export class CreatePersonDto {
-  @ApiProperty({ type: Number, minLength: 8 })
-  documentNumber: number;
+  @ApiProperty({ type: BigInt, minLength: 8 })
+  documentNumber: bigint;
 
   @ApiProperty({ type: String })
   firstName: string;
@@ -24,8 +24,8 @@ export class CreatePersonDto {
   @ApiProperty({ examples: [Gender.Male, Gender.Female] })
   gender: Gender;
 
-  @ApiProperty({ required: false, type: Number, minLength: 10 })
-  phone?: number;
+  @ApiProperty({ required: false, type: BigInt, minLength: 10 })
+  phone?: bigint;
 
   @ApiProperty({ type: Number })
   documentTypeId: number;

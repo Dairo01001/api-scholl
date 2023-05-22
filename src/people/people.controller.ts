@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PeopleService } from './people.service';
 import { CreatePersonDto } from './dto/create-person.dto';
@@ -33,17 +34,24 @@ export class PeopleController {
 
   @Get(':id')
   @ApiOkResponse({ type: PersonEntity })
-  findOne(@Param('id') id: string) {
-    return this.peopleService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return new PersonEntity(await this.peopleService.findOne(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePersonDto: UpdatePersonDto) {
-    return this.peopleService.update(+id, updatePersonDto);
+  @ApiOkResponse({ type: PersonEntity })
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePersonDto: UpdatePersonDto,
+  ) {
+    return new PersonEntity(
+      await this.peopleService.update(id, updatePersonDto),
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.peopleService.remove(+id);
+  @ApiOkResponse({ type: PersonEntity })
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return new PersonEntity(await this.peopleService.remove(id));
   }
 }

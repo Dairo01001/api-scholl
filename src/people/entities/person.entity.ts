@@ -15,7 +15,7 @@ export class PersonEntity implements Person {
   id: number;
 
   @ApiProperty()
-  documentNumber: number;
+  documentNumber: bigint;
 
   @ApiProperty()
   firstName: string;
@@ -33,7 +33,7 @@ export class PersonEntity implements Person {
   gender: Gender;
 
   @ApiProperty({ required: false, nullable: true })
-  phone: number | null;
+  phone: bigint | null;
 
   @ApiProperty()
   birthDate: Date;
