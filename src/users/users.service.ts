@@ -1,26 +1,65 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+
+export const roundsOfHashing = 10;
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      roundsOfHashing,
+    );
+
+    createUserDto.password = hashedPassword;
+
+    return this.prisma.user.create({
+      data: createUserDto,
+    });
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.prisma.user.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(personId: number) {
+    const user = await this.prisma.user.findUnique({ where: { personId } });
+    if (!user) {
+      throw new NotFoundException(`User with ${personId} does not exist.`);
+    }
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(personId: number, updateUserDto: UpdateUserDto) {
+    try {
+      if (updateUserDto.password) {
+        updateUserDto.password = await bcrypt.hash(
+          updateUserDto.password,
+          roundsOfHashing,
+        );
+      }
+
+      return await this.prisma.user.update({
+        where: { personId },
+        data: updateUserDto,
+      });
+    } catch (error) {
+      throw new NotFoundException(`User with ${personId} does not exist.`);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(personId: number) {
+    return this.prisma.user.update({
+      where: { personId },
+      data: {
+        status: 'Inactive',
+        endDate: new Date().toISOString(),
+      },
+    });
   }
 }
