@@ -7,6 +7,9 @@ import { DocumentsModule } from './documents/documents.module';
 import { BloodtypesModule } from './bloodtypes/bloodtypes.module';
 import { TeachersModule } from './teachers/teachers.module';
 import { StudentsModule } from './students/students.module';
+import { DegreesModule } from './degrees/degrees.module';
+import { SubjectsModule } from './subjects/subjects.module';
+import { SubjectsdegreesModule } from './subjectsdegrees/subjectsdegrees.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { StudentsModule } from './students/students.module';
     BloodtypesModule,
     TeachersModule,
     StudentsModule,
+    DegreesModule,
+    SubjectsModule,
+    SubjectsdegreesModule,
   ],
 })
 export class AppModule {}
