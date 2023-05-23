@@ -7,12 +7,19 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { BloodtypesService } from './bloodtypes.service';
 import { CreateBloodtypeDto } from './dto/create-bloodtype.dto';
 import { UpdateBloodtypeDto } from './dto/update-bloodtype.dto';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { BloodtypeEntity } from './entities/bloodtype.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('bloodtypes')
 @ApiTags('Tipos de Sangre')
@@ -20,6 +27,8 @@ export class BloodtypesController {
   constructor(private readonly bloodtypesService: BloodtypesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: BloodtypeEntity })
   create(@Body() createBloodtypeDto: CreateBloodtypeDto) {
     return this.bloodtypesService.create(createBloodtypeDto);
@@ -38,6 +47,8 @@ export class BloodtypesController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: BloodtypeEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -47,6 +58,8 @@ export class BloodtypesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: BloodtypeEntity })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.bloodtypesService.remove(id);

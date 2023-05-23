@@ -27,29 +27,32 @@ export class TeachersService {
       },
     });
 
-    const newUser = await this.userService.create({
+    await this.userService.create({
       user: newPerson.documentNumber,
       personId: newPerson.id,
       role: Role.Teacher,
       password: password,
     });
 
-    return { person: newPerson, teacher: newTeacher, user: newUser };
+    return newTeacher;
   }
 
   findAll() {
-    return `This action returns all teachers`;
+    return this.prisma.teacher.findMany({});
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} teacher`;
+    return this.prisma.teacher.findUnique({ where: { id } });
   }
 
   update(id: number, updateTeacherDto: UpdateTeacherDto) {
-    return `This action updates a #${id} teacher`;
+    return this.prisma.teacher.update({
+      where: { id },
+      data: updateTeacherDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} teacher`;
+    return this.prisma.teacher.delete({ where: { id } });
   }
 }
