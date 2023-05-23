@@ -22,7 +22,7 @@ import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('users')
-@ApiTags('users')
+@ApiTags('Usuarios')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

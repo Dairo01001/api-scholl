@@ -30,13 +30,13 @@ model DocumentType {
 
 model Person {
   id             Int      @id @default(autoincrement()) @map("ID_PERSONA")
-  documentNumber BigInt   @unique @map("NUMERO_DOC_PER")
+  documentNumber String   @unique @map("NUMERO_DOC_PER")
   firstName      String   @map("NOMBRE_UNO_PER")
   middleName     String?  @map("NOMBRE_DOS_PER")
   surname        String   @map("APELLIDO_UNO_PER")
   secondSurname  String?  @map("APELLIDO_DOS_PER")
   gender         Gender   @map("SEXO_PER")
-  phone          BigInt?  @map("NUMERO_CONTACTO_PER")
+  phone          String?  @map("NUMERO_CONTACTO_PER")
   birthDate      DateTime @map("FECHA_NAC_PER")
 
   documentType   DocumentType @relation(fields: [documentTypeId], references: [id])
@@ -204,7 +204,7 @@ model Guardian {
   middleName    String? @map("NOMBRE_DOS_ACU")
   surname       String  @map("APELLIDO_UNO_ACU")
   secondSurname String? @map("APELLIDO_DOS_ACU")
-  phone         BigInt  @map("NUMERO_CONTACTO_ACU")
+  phone         String  @map("NUMERO_CONTACTO_ACU")
 
   students GuardiansOnStudents[]
 

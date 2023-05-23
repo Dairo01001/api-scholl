@@ -16,7 +16,10 @@ export class PeopleService {
   }
 
   findOne(id: number) {
-    return this.prisma.person.findUnique({ where: { id } });
+    return this.prisma.person.findUnique({
+      where: { id },
+      include: { user: true, bloodType: true, documentType: true },
+    });
   }
 
   update(id: number, updatePersonDto: UpdatePersonDto) {

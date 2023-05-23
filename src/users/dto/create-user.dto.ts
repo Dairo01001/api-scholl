@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
 
-enum Role {
+export enum Role {
   Teacher = 'Teacher',
   Student = 'Student',
 }
