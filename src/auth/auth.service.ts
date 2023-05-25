@@ -7,6 +7,7 @@ import { PrismaService } from './../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthEntity } from './entity/auth.entity';
 import * as bcrypt from 'bcrypt';
+import { UserStatus } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -16,9 +17,18 @@ export class AuthService {
   ) {}
 
   async login(user: string, password: string): Promise<AuthEntity> {
-    const person = await this.prisma.user.findUnique({ where: { user } });
+    const person = await this.prisma.user.findUnique({
+      where: { user },
+      include: {
+        person: {
+          include: {
+            teacher: true,
+          },
+        },
+      },
+    });
 
-    if (!person) {
+    if (!person || person.status === UserStatus.Inactive) {
       throw new NotFoundException(`No user found for: ${user}`);
     }
 
@@ -29,6 +39,11 @@ export class AuthService {
     }
 
     return {
+      id: person.personId,
+      role: person.role,
+      status: person.status,
+      name: `${person.person.firstName} ${person.person.surname}`,
+      email: person.person.teacher?.email || '',
       accessToken: this.jwtService.sign({ userId: person.personId }),
     };
   }

@@ -29,7 +29,7 @@ export class DocumentsService {
       Prisma.sql`
       SELECT DOCUMENTO.ID_DOCUMENTO AS id, DOCUMENTO.TIPO_DOC AS name
       FROM DOCUMENTO
-      WHERE DOCUMENTO.ID_DOCUMENTO = 3
+      WHERE DOCUMENTO.ID_DOCUMENTO = ${id}
       ORDER BY DOCUMENTO.ID_DOCUMENTO DESC;
       `,
     );
