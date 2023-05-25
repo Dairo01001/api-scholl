@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { Role } from 'src/users/dto/create-user.dto';
+import { UserStatus } from '@prisma/client';
 
 @Injectable()
 export class TeachersService {
@@ -14,6 +15,18 @@ export class TeachersService {
 
   async create(createTeacherDto: CreateTeacherDto) {
     const { password, profession, email, ...datePerson } = createTeacherDto;
+
+    const person = await this.prisma.person.findUnique({
+      where: {
+        documentNumber: datePerson.documentNumber,
+      },
+    });
+
+    if (person) {
+      throw new NotAcceptableException(
+        'A user with that document number already exists.',
+      );
+    }
 
     const newPerson = await this.prisma.person.create({
       data: datePerson,
@@ -53,6 +66,11 @@ export class TeachersService {
   }
 
   remove(id: number) {
-    return this.prisma.teacher.delete({ where: { id } });
+    return this.prisma.user.update({
+      where: { personId: id },
+      data: {
+        status: UserStatus.Inactive,
+      },
+    });
   }
 }

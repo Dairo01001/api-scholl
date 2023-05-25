@@ -61,7 +61,7 @@ model User {
   startDate DateTime   @default(now()) @map("FECHA_ING_USU")
   endDate   DateTime?  @map("FECHA_EGR_USU")
   role      Role       @default(Student) @map("ROLL_USU")
-  status    UserStatus @default(Active)
+  status    UserStatus @default(Active) @map("ESTADO_USU")
 
   person   Person @relation(fields: [personId], references: [id])
   personId Int    @unique @map("ID_PERSONA")
