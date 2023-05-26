@@ -11,8 +11,9 @@ datasource db {
 }
 
 model BloodType {
-  id   Int    @id @default(autoincrement()) @map("ID_RH")
-  name String @unique @map("NOMBRE_RH")
+  id     Int     @id @default(autoincrement()) @map("ID_RH")
+  name   String  @unique @map("NOMBRE_RH")
+  status Boolean @default(true) @map("ESTADO_RH")
 
   people Person[]
 
@@ -20,8 +21,9 @@ model BloodType {
 }
 
 model DocumentType {
-  id   Int    @id @default(autoincrement()) @map("ID_DOCUMENTO")
-  name String @unique @map("TIPO_DOC")
+  id     Int     @id @default(autoincrement()) @map("ID_DOCUMENTO")
+  name   String  @unique @map("TIPO_DOC")
+  status Boolean @default(true) @map("ESTADO_DOC")
 
   people Person[]
 
@@ -38,6 +40,7 @@ model Person {
   gender         Gender   @map("SEXO_PER")
   phone          String?  @map("NUMERO_CONTACTO_PER")
   birthDate      DateTime @map("FECHA_NAC_PER")
+  status         Boolean  @default(true) @map("ESTADO_PER")
 
   documentType   DocumentType @relation(fields: [documentTypeId], references: [id])
   documentTypeId Int          @map("ID_DOCUMENTO")
@@ -73,8 +76,9 @@ model User {
 }
 
 model Teacher {
-  email      String @map("CORREO_DOC")
-  profession String @map("PROFESION_DOC")
+  email      String  @unique @map("CORREO_DOC")
+  profession String  @map("PROFESION_DOC")
+  status     Boolean @default(true) @map("ESTADO_DOC")
 
   person Person @relation(fields: [id], references: [id])
   id     Int    @id @map("ID_PERSONA")
@@ -85,7 +89,8 @@ model Teacher {
 }
 
 model Student {
-  photo String @map("FOTO_EST")
+  photo  String  @map("FOTO_EST")
+  status Boolean @default(true) @map("ESTADO_EST")
 
   person    Person  @relation(fields: [id], references: [id])
   id        Int     @id @map("ID_PERSONA")
@@ -102,8 +107,9 @@ model Student {
 }
 
 model Degree {
-  id   Int    @id @default(autoincrement()) @map("CODIGO_GRA")
-  name String @map("NOMBRE_GRA")
+  id     Int     @id @default(autoincrement()) @map("CODIGO_GRA")
+  name   String  @unique @map("NOMBRE_GRA")
+  status Boolean @default(true) @map("ESTADO_GRA")
 
   subjects SubjectsOnDegrees[]
   groups   Group[]
@@ -112,8 +118,9 @@ model Degree {
 }
 
 model Subject {
-  id   Int    @id @default(autoincrement()) @map("CODIGO_ASIG")
-  name String @map("NOMBRE_ASIG")
+  id     Int     @id @default(autoincrement()) @map("CODIGO_ASIG")
+  name   String  @unique @map("NOMBRE_ASIG")
+  status Boolean @default(true) @map("ESTADO_ASIG")
 
   degrees   SubjectsOnDegrees[]
   notes     Note[]
@@ -161,7 +168,7 @@ model Group {
   id     Int         @id @default(autoincrement()) @map("CODIGO_GRU")
   status GroupStatus @map("ESTADO_GRU")
   year   Int         @map("ANIO_GRU")
-  name   String      @map("NOMBRE_GRU")
+  name   String      @unique @map("NOMBRE_GRU")
 
   degree   Degree @relation(fields: [degreeId], references: [id])
   degreeId Int    @map("CODIGO_GRA")
@@ -188,6 +195,7 @@ model Observation {
   id          Int      @id @default(autoincrement()) @map("ID_OBSERVACION")
   date        DateTime @map("FECHA_OBS")
   description String   @map("DESCRIPCION_OBS")
+  status      Boolean  @default(true) @map("ESTADO_OBS")
 
   student   Student @relation(fields: [studentId], references: [id])
   studentId Int     @map("ID_ESTUDIANTE")
@@ -205,6 +213,7 @@ model Guardian {
   surname       String  @map("APELLIDO_UNO_ACU")
   secondSurname String? @map("APELLIDO_DOS_ACU")
   phone         String  @map("NUMERO_CONTACTO_ACU")
+  status        Boolean @default(true) @map("ESTADO_ACU")
 
   students GuardiansOnStudents[]
 
@@ -240,10 +249,11 @@ model Period {
 }
 
 model Note {
-  id          Int    @id @default(autoincrement()) @map("ID_NOTA")
-  score       Float  @map("VALOR_NOTA")
-  description String @map("DESCRIPCION_NOTA")
-  percenScore Float  @map("PORCENTAJE_NOTA")
+  id          Int     @id @default(autoincrement()) @map("ID_NOTA")
+  score       Float   @map("VALOR_NOTA")
+  description String  @map("DESCRIPCION_NOTA")
+  percenScore Float   @map("PORCENTAJE_NOTA")
+  status      Boolean @default(true) @map("ESTADO_NOTA")
 
   period   Period @relation(fields: [periodId], references: [id])
   periodId Int    @map("ID_PERIODO")
@@ -261,8 +271,9 @@ model Note {
 }
 
 model DayWeek {
-  id   Int    @id @default(autoincrement()) @map("ID_DIA_SEMANA")
-  name String @unique @map("DIA_SEMANA_HOR")
+  id     Int     @id @default(autoincrement()) @map("ID_DIA_SEMANA")
+  name   String  @unique @map("DIA_SEMANA_HOR")
+  status Boolean @default(true) @map("ESTADO_DIA_SEMANA")
 
   schedules Schedule[]
 
@@ -270,9 +281,10 @@ model DayWeek {
 }
 
 model TimeBlock {
-  id        Int    @id @default(autoincrement()) @map("ID_BLOQUE_HORA")
-  startTime String @map("INICIO_HORA_BLO")
-  endTime   String @map("FIN_HORA_BLO")
+  id        Int     @id @default(autoincrement()) @map("ID_BLOQUE_HORA")
+  startTime String  @map("INICIO_HORA_BLO")
+  endTime   String  @map("FIN_HORA_BLO")
+  status    Boolean @default(true) @map("ESTADO")
 
   schedules Schedule[]
 
@@ -281,9 +293,10 @@ model TimeBlock {
 }
 
 model Schedule {
-  id   Int    @id @default(autoincrement()) @map("ID_HORARIO")
-  year Int    @map("ANIO")
-  time String @map("CANTIDAD_HORA_HOR")
+  id     Int     @id @default(autoincrement()) @map("ID_HORARIO")
+  year   Int     @map("ANIO")
+  time   String  @map("CANTIDAD_HORA_HOR")
+  status Boolean @default(true) @map("ESTADO")
 
   dayWeek   DayWeek @relation(fields: [dayWeekId], references: [id])
   dayWeekId Int     @map("ID_DIA_SEMANA")

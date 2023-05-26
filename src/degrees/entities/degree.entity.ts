@@ -7,4 +7,7 @@ export class DegreeEntity implements Degree {
 
   @ApiProperty({ type: String })
   name: string;
+
+  @ApiProperty()
+  status: boolean;
 }

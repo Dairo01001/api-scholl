@@ -2,6 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Teacher } from '@prisma/client';
 
 export class TeacherEntity implements Teacher {
+  @ApiProperty()
+  status: boolean;
+
   @ApiProperty({ type: String })
   email: string;
 

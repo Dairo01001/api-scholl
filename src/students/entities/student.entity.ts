@@ -10,4 +10,7 @@ export class StudentEntity implements Student {
 
   @ApiProperty({ type: Number })
   teacherId: number;
+
+  @ApiProperty()
+  status: boolean;
 }

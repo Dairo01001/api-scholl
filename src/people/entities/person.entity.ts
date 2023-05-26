@@ -14,6 +14,9 @@ export class PersonEntity implements Person {
   }
 
   @ApiProperty()
+  status: boolean;
+
+  @ApiProperty()
   id: number;
 
   @ApiProperty()
