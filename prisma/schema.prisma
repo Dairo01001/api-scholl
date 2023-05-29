@@ -101,7 +101,7 @@ model Student {
   groups       StudentsOnGroups[]
   observations Observation[]
   guardians    GuardiansOnStudents[]
-  notes        Note[]
+  notes        NotesOnStudent[]
 
   @@map("ESTUDIANTE")
 }
@@ -250,7 +250,6 @@ model Period {
 
 model Note {
   id          Int     @id @default(autoincrement()) @map("ID_NOTA")
-  score       Float   @map("VALOR_NOTA")
   description String  @map("DESCRIPCION_NOTA")
   percenScore Float   @map("PORCENTAJE_NOTA")
   status      Boolean @default(true) @map("ESTADO_NOTA")
@@ -261,13 +260,24 @@ model Note {
   subject   Subject @relation(fields: [subjectId], references: [id])
   subjectId Int     @map("CODIGO_ASIG")
 
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  students  NotesOnStudent[]
+
+  @@map("NOTA")
+}
+
+model NotesOnStudent {
+  score Float @map("VALOR_NOTA")
+
+  note   Note @relation(fields: [noteId], references: [id])
+  noteId Int  @map("ID_NOTA")
+
   student   Student @relation(fields: [studentId], references: [id])
   studentId Int     @map("ID_ESTUDIANTE")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("NOTA")
+  @@id([noteId, studentId])
+  @@map("NOTAS_ESTUDIANTE")
 }
 
 model DayWeek {

@@ -1,16 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Student } from '@prisma/client';
-
-export class StudentEntity implements Student {
-  @ApiProperty({ type: String })
-  photo: string;
-
-  @ApiProperty({ type: Number })
+export class StudentEntity {
+  @ApiProperty()
   id: number;
 
-  @ApiProperty({ type: Number })
-  teacherId: number;
+  @ApiProperty()
+  photo: string;
 
   @ApiProperty()
   status: boolean;
+
+  @ApiProperty()
+  documentNumber: string;
+
+  @ApiProperty()
+  firstName: string;
+
+  @ApiProperty()
+  middleName: string;
+
+  @ApiProperty()
+  surname: string;
+
+  @ApiProperty()
+  secondSurname: string;
+
+  @ApiProperty()
+  gender: string;
+
+  @ApiProperty()
+  phone: string;
+
+  @ApiProperty()
+  birthDate: Date;
+
+  @ApiProperty()
+  RH: string;
 }

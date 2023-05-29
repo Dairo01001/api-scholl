@@ -16,6 +16,9 @@ import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { GroupsModule } from './groups/groups.module';
+import { ObservationsModule } from './observations/observations.module';
+import { GuardiansModule } from './guardians/guardians.module';
 
 @Module({
   imports: [
@@ -45,6 +48,9 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         },
       },
     }),
+    GroupsModule,
+    ObservationsModule,
+    GuardiansModule,
   ],
 })
 export class AppModule {}

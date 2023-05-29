@@ -55,7 +55,12 @@ export class TeachersService {
   }
 
   findOne(id: number) {
-    return this.prisma.teacher.findUnique({ where: { id } });
+    return this.prisma.teacher.findUnique({
+      where: { id },
+      include: {
+        students: true,
+      },
+    });
   }
 
   update(id: number, updateTeacherDto: UpdateTeacherDto) {
