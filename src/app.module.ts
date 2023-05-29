@@ -19,6 +19,10 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { GroupsModule } from './groups/groups.module';
 import { ObservationsModule } from './observations/observations.module';
 import { GuardiansModule } from './guardians/guardians.module';
+import { PeriodsModule } from './periods/periods.module';
+import { NotesModule } from './notes/notes.module';
+import { DayweeksModule } from './dayweeks/dayweeks.module';
+import { TimeblocksModule } from './timeblocks/timeblocks.module';
 
 @Module({
   imports: [
@@ -51,6 +55,10 @@ import { GuardiansModule } from './guardians/guardians.module';
     GroupsModule,
     ObservationsModule,
     GuardiansModule,
+    PeriodsModule,
+    NotesModule,
+    DayweeksModule,
+    TimeblocksModule,
   ],
 })
 export class AppModule {}

@@ -64,19 +64,6 @@ export class StudentsService {
   }
 
   async findOne(id: number) {
-    return this.prisma.student.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        notes: {
-          include: {
-            subject: true,
-          },
-        },
-      },
-    });
-    /*
     const student = await this.prisma.$queryRaw(
       Prisma.sql`
       SELECT 
@@ -113,7 +100,6 @@ export class StudentsService {
     }
 
     return student[0];
-    */
   }
 
   update(id: number, updateStudentDto: UpdateStudentDto) {
