@@ -16,6 +16,14 @@ import { ConfigModule } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { GroupsModule } from './groups/groups.module';
+import { ObservationsModule } from './observations/observations.module';
+import { GuardiansModule } from './guardians/guardians.module';
+import { PeriodsModule } from './periods/periods.module';
+import { NotesModule } from './notes/notes.module';
+import { DayweeksModule } from './dayweeks/dayweeks.module';
+import { TimeblocksModule } from './timeblocks/timeblocks.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
@@ -45,6 +53,14 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         },
       },
     }),
+    GroupsModule,
+    ObservationsModule,
+    GuardiansModule,
+    PeriodsModule,
+    NotesModule,
+    DayweeksModule,
+    TimeblocksModule,
+    SchedulesModule,
   ],
 })
 export class AppModule {}

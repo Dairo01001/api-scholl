@@ -7,4 +7,7 @@ export class DocumentEntity implements DocumentType {
 
   @ApiProperty({ type: String })
   name: string;
+
+  @ApiProperty()
+  status: boolean;
 }

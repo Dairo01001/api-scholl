@@ -7,4 +7,7 @@ export class BloodtypeEntity implements BloodType {
 
   @ApiProperty({ type: String })
   name: string;
+
+  @ApiProperty()
+  status: boolean;
 }

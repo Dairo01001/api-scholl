@@ -7,4 +7,7 @@ export class SubjectEntity implements Subject {
 
   @ApiProperty({ type: String })
   name: string;
+
+  @ApiProperty()
+  status: boolean;
 }

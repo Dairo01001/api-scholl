@@ -46,7 +46,6 @@ export class CreatePersonDto {
   @ApiProperty({ examples: [Gender.Male, Gender.Female] })
   gender: Gender;
 
-  @IsNumberString()
   @ApiProperty({ required: false, type: String, minLength: 10 })
   phone?: string;
 
