@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class DayweeksService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createDayweekDto: CreateDayweekDto) {
+  async create(createDayweekDto: CreateDayweekDto) {
     return this.prisma.dayWeek.create({
       data: createDayweekDto,
     });

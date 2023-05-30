@@ -23,6 +23,7 @@ import { PeriodsModule } from './periods/periods.module';
 import { NotesModule } from './notes/notes.module';
 import { DayweeksModule } from './dayweeks/dayweeks.module';
 import { TimeblocksModule } from './timeblocks/timeblocks.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { TimeblocksModule } from './timeblocks/timeblocks.module';
     NotesModule,
     DayweeksModule,
     TimeblocksModule,
+    SchedulesModule,
   ],
 })
 export class AppModule {}
